@@ -34,51 +34,62 @@ The names of the states are formatted like this: squeezebox.&lt;instance&gt;.&lt
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.power
 Boolean, read-write
+
 - true: player is powered on
 - false: plyer is on stand-by
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.state
 Enumeration, read-write
+
 - 0: Pause
 - 1: Play
 - 2: Stop
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.volume
 Integer (0...100), read-write
+
 Playback volume from nothing (0) to maximum (100)
 Be careful when setting high values (&gt;50) as this might hurt your ears (or your loved ones')!
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.muting
 Boolean, read-write
+
 - true: player is muted (playback continues, but loudspeaker is off)
 - false: player is in regular playback mode
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentTitle
 String, read-only
+
 The name of the currently playing (or paused) song or stream. Can be empty.
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentAlbum
 String, read-only
+
 The name of the album of the currently playing (or paused) song or stream. Can be empty.
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentArtist
 String, read-only
+
 The name of the artist of the currently playing (or paused) song or stream. Can be empty.
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentDuration
 Integer, read-only
+
 The total length in seconds of the current song or stream.
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentDurationText
 String, read-only
+
 The formatted total length of the current song or stream. (Format: "[hh:]mm:ss")
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.elapsedTime
 Integer, read-only
+
 The number of seconds the current song or stream has been played already. This value is updated every "Track time update interval" (see Configuration above)
 
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.elapsedTimeText
 String, read-only
+
 The formatted time the current song or stream has been played already. This value is updated every "Track time update interval" (see Configuration above)
 
 ## Changelog

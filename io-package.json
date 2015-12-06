@@ -15,7 +15,7 @@
         "loglevel":                 "info",
         "keywords":                 ["squeezebox", "logitech", "media server", "audio", "playback"],
         "icon":                     "squeezebox.png",
-        "extIcon":                  "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/squeezebox.png"
+        "extIcon":                  "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.squeezebox/master/admin/squeezebox.png"
     },
     "native": {
       "server": "0.0.0.0",
