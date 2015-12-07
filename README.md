@@ -98,6 +98,8 @@ The formatted time the current song or stream has been played already. This valu
 
 ## Roadmap/Todo
 
+- States for cover and playlist [Arminhh]
+
 ## License
 
 Apache 2.0
