@@ -215,12 +215,116 @@ function completePlayer(device) {
     channelNames.push(channelName);
     device.channelName = channelName;
     
+    // create objects
+    adapter.setObject(channelName, {
+        type: 'channel',
+        common: {
+            name: channelName,
+            role: 'media.music'
+        },
+        native: {
+            mac: device.mac,
+            name: device.name
+        }
+    });
+    createStateObject({
+        name: channelName + '.power',
+        read: true,
+        write: true,
+        type: 'boolean',
+        role: 'switch'
+    });
+    createStateObject({
+        name: channelName + '.state',
+        read: true,
+        write: true,
+        type: 'number',
+        role: 'switch', // TODO: anything better???
+        min: 0,
+        max: 2
+    });
+    createStateObject({
+        name: channelName + '.volume',
+        read: true,
+        write: true,
+        type: 'number',
+        role: 'level.volume',
+        min: 0,
+        max: 100
+    });
+    createStateObject({
+        name: channelName + '.muting',
+        read: true,
+        write: true,
+        type: 'boolean',
+        role: 'switch'
+    });
+    createStateObject({
+        name: channelName + '.currentTitle',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text'
+    });
+    createStateObject({
+        name: channelName + '.currentAlbum',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text'
+    });
+    createStateObject({
+        name: channelName + '.currentArtist',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text'
+    });
+    createStateObject({
+        name: channelName + '.currentDuration',
+        read: true,
+        write: false,
+        type: 'number',
+        role: 'value.interval'
+    });
+    createStateObject({
+        name: channelName + '.currentDurationText',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text'
+    });
+    createStateObject({
+        name: channelName + '.elapsedTime',
+        read: true,
+        write: false,
+        type: 'number',
+        role: 'value.interval'
+    });
+    createStateObject({
+        name: channelName + '.elapsedTimeText',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text'
+    });
+    
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
     device.player.runTelnetCmd("current_title ?");
     device.player.runTelnetCmd("artist ?");
     device.player.runTelnetCmd("album ?");
     device.player.runTelnetCmd("mode ?");
+}
+
+function createStateObject(commonInfo) {
+    var obj = {
+        type: 'state',
+        common: commonInfo,
+        native: {
+        }
+    };
+    adapter.setObject(commonInfo.name, obj);
 }
 
 function processSqueezeboxEvents(device, eventData) {
