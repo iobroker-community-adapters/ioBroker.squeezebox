@@ -13,7 +13,7 @@
         "messagebox":               true,
         "readme":                   "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/README.md",
         "loglevel":                 "info",
-        "type":                     "media"
+        "type":                     "media",
         "keywords":                 ["squeezebox", "logitech", "media server", "audio", "playback"],
         "icon":                     "squeezebox.png",
         "extIcon":                  "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.squeezebox/master/admin/squeezebox.png"
