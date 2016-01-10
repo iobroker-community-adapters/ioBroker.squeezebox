@@ -11,6 +11,9 @@ var squeezeboxServer;
 var devices = {}; // mapping of MAC to device object (which has a reference to the player for that device)
 var currentStates = {}; // mapping of state name to state value (so we don't set the same value multiple times)
 
+// Squeezebox Server HTTP TCP port (web interface)
+var httpPort;
+
 // unloading
 adapter.on('unload', function (callback) {
     if (squeezeboxServer && squeezeboxServer.telnet) {
@@ -91,11 +94,24 @@ adapter.on('ready', function () {
     main();
 });
 
+// "override" handleLine for our "pref httpport" query
+logitechmediaserver.prototype.handleLine2 = logitechmediaserver.prototype.handleLine;
+logitechmediaserver.prototype.handleLine = function (buffer) {
+    var self = this;
+    if (!self.handle(buffer, "pref httpport", function (params, buffer) {
+        httpPort = params;
+        adapter.log.info('httpport: ' + httpPort);
+    })) { self.handleLine2(buffer) } ;
+}
+
 function main() {
     adapter.subscribeStates('*');
 
     squeezeboxServer = new logitechmediaserver(adapter.config.server);
     squeezeboxServer.on("registration_finished", function () {
+        
+        // request the HTTP port
+        squeezeboxServer.telnet.writeln("pref httpport ?");
 
         adapter.log.info('creating/updating player channels');
         for (var mac in squeezeboxServer.players) {
@@ -106,7 +122,8 @@ function main() {
                 channelName: null,
                 player: squeezeboxServer.players[mac],
                 duration: 0,
-                elapsed: 0
+                elapsed: 0,
+                searchingArtwork: true
             };
             devices[mac] = device;
             preparePlayer(device);
@@ -281,6 +298,13 @@ function completePlayer(device) {
         role: 'text'
     });
     createStateObject({
+        name: channelName + '.currentArtwork',
+        read: true,
+        write: false,
+        type: 'string',
+        role: 'text.url'
+    });
+    createStateObject({
         name: channelName + '.currentDuration',
         read: true,
         write: false,
@@ -315,6 +339,7 @@ function completePlayer(device) {
     device.player.runTelnetCmd("artist ?");
     device.player.runTelnetCmd("album ?");
     device.player.runTelnetCmd("mode ?");
+    device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
 }
 
 function createStateObject(commonInfo) {
@@ -342,6 +367,8 @@ function processSqueezeboxEvents(device, eventData) {
                 clearInterval(device.elapsedTimer);
                 device.elapsedTimer = null;
                 device.player.runTelnetCmd('time ?');
+                device.searchingArtwork = true;
+                device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
             }
         }
         return;
@@ -387,5 +414,25 @@ function processSqueezeboxEvents(device, eventData) {
 
             }, interval * 1000, device.uuid);
         }
+        return;
+    }
+    
+    if (eventData[0] == 'status') {
+        if (!device.searchingArtwork) {
+            return;
+        }
+        
+        device.searchingArtwork = false;
+        var last = eventData[eventData.length - 1];
+        const ARTWORK_URL_PREFIX = 'artwork_url:';
+        var artworkUrl = '';
+        if (last.indexOf(ARTWORK_URL_PREFIX) === 0) {
+            artworkUrl = last.substr(ARTWORK_URL_PREFIX.length);
+        }
+        else {
+            artworkUrl = 'http://' + adapter.config.server + ':' + httpPort + '/music/current/cover.jpg?player=' + device.mac + '&t=' + (new Date().getTime() % 100000);
+        }
+        
+        setStateAck(device.channelName + '.currentArtwork', artworkUrl);
     }
 }

@@ -72,6 +72,14 @@ String, read-only
 
 The name of the artist of the currently playing (or paused) song or stream. Can be empty.
 
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentArtwork
+String (URL), read-only
+
+The URL to an artwork for the currently playing (or paused) song or stream. Should never be empty.
+If a stream is played, its artwork URL is used (see CLI "songinfo" tag "K").
+If there is no artwork URL available (e.g. for a regular MP3 from LMS), the generic "current player artwork" link is used.
+To the generic artwork link, the adapter adds a "random" number to make sure the URL changes whenever the song changes.
+
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentDuration
 Integer, read-only
 
@@ -96,9 +104,13 @@ The formatted time the current song or stream has been played already. This valu
 ### 0.0.1
 * (UncleSamSwiss) Initial version
 
+### 0.0.2
+* (UncleSamSwiss) Support for artwork (will use stream artwork if available, otherwise server artwork)
+
 ## Roadmap/Todo
 
-- States for cover and playlist [Arminhh]
+- State for playlist [Arminhh]
+- Synchronization of players [Arminhh]
 
 ## License
 

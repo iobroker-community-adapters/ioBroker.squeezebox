@@ -1,6 +1,6 @@
 {
   "name": "iobroker.squeezebox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Controls a Squeezebox Server a.k.a. Logitech Media Server and its players.",
   "author": {
     "name": "UncleSamSwiss",
