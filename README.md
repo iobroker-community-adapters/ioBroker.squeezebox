@@ -107,6 +107,9 @@ The formatted time the current song or stream has been played already. This valu
 ### 0.0.2
 * (UncleSamSwiss) Support for artwork (will use stream artwork if available, otherwise server artwork)
 
+### 0.1.0
+* (UncleSamSwiss) Ready to be published to NPM (no further changes)
+
 ## Roadmap/Todo
 
 - State for playlist [Arminhh]

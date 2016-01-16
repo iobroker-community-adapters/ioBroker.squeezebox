@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "squeezebox",
-        "version":                  "0.0.2",
+        "version":                  "0.1.0",
         "title":                    "Logitech Squeezebox Adapter",
         "desc":                     "Controls a Squeezebox Server a.k.a. Logitech Media Server and its players.",
         "authors": [
