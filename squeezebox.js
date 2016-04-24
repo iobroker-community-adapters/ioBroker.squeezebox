@@ -428,6 +428,9 @@ function processSqueezeboxEvents(device, eventData) {
         var artworkUrl = '';
         if (last.indexOf(ARTWORK_URL_PREFIX) === 0) {
             artworkUrl = last.substr(ARTWORK_URL_PREFIX.length);
+            if (artworkUrl.indexOf('//') === -1) {
+                artworkUrl = 'http://' + adapter.config.server + ':' + httpPort + '/' + artworkUrl;
+            }
         }
         else {
             artworkUrl = 'http://' + adapter.config.server + ':' + httpPort + '/music/current/cover.jpg?player=' + device.mac + '&t=' + (new Date().getTime() % 100000);
