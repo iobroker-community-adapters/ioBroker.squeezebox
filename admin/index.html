@@ -17,6 +17,9 @@
                 "de": "Logitech Squeezebox Adapter-Einstellungen"
             },
             "Logitech Media Server Address": { "en": "Logitech Media Server Address", "de": "Logitech Media Server Addresse" },
+            "Logitech Media Server Port": { "en": "Logitech Media Server Port", "de": "Logitech Media Server Port" },
+            "Username (optional)": { "en": "Username (optional)", "de": "Benutzername (optional)" },
+            "Password (optional)": { "en": "Password (optional)", "de": "Passwort (optional)" },
             "Track time update interval (sec)": {
                 "en": "Track time update interval (sec)",
                 "de": "Aktualisierungsintervall der Stück-Zeit (sec)"
@@ -42,6 +45,8 @@
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
+            settings.port = settings.port || 9090;
+
             for (var key in settings) {
                 setValue(key, settings[key], onChange);
             }
@@ -87,6 +92,18 @@
                 <tr>
                     <td class="translate">Logitech Media Server Address</td>
                     <td><input type="text" id="server" class="value"></td>
+                </tr>
+                <tr>
+                    <td class="translate">Logitech Media Server Port</td>
+                    <td><input type="text" id="port" class="value"></td>
+                </tr>
+                <tr>
+                    <td class="translate">Username (optional)</td>
+                    <td><input type="text" id="username" class="value"></td>
+                </tr>
+                <tr>
+                    <td class="translate">Password (optional)</td>
+                    <td><input type="text" id="password" class="value"></td>
                 </tr>
                 <tr>
                     <td class="translate">Track time update interval (sec)</td>

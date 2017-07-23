@@ -1,6 +1,6 @@
 {
   "name": "iobroker.squeezebox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Adapter for ioBroker that controls a Squeezebox Server a.k.a. Logitech Media Server and its players.",
   "author": {
     "name": "UncleSamSwiss",
@@ -14,7 +14,7 @@
   ],
   "homepage": "https://github.com/UncleSamSwiss/ioBroker.squeezebox",
   "readme": "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/README.md",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "keywords": [
     "ioBroker",
     "squeezebox",
@@ -28,7 +28,7 @@
     "url": "git+https://github.com/UncleSamSwiss/ioBroker.squeezebox.git"
   },
   "dependencies": {
-    "logitechmediaserver": "~0.0.3"
+    "logitechmediaserver": "~0.0.4"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

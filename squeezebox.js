@@ -38,11 +38,11 @@ adapter.on('unload', function (callback) {
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
+    // Warning, state can be null if it was deleted
     if (!id || !state || state.ack || currentStates[id] === state.val) {
         return;
     }
 
-    // Warning, state can be null if it was deleted
     adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     var idParts = id.split('.');
     var dp = idParts.pop();
@@ -100,14 +100,15 @@ logitechmediaserver.prototype.handleLine = function (buffer) {
     var self = this;
     if (!self.handle(buffer, "pref httpport", function (params, buffer) {
         httpPort = params;
-        adapter.log.info('httpport: ' + httpPort);
+        adapter.log.debug('httpport: ' + httpPort);
     })) { self.handleLine2(buffer) } ;
 }
 
 function main() {
+    adapter.setState('info.connection', false, true);
     adapter.subscribeStates('*');
 
-    squeezeboxServer = new logitechmediaserver(adapter.config.server);
+    squeezeboxServer = new logitechmediaserver(adapter.config.server, adapter.config.port);
     squeezeboxServer.on("registration_finished", function () {
         
         // request the HTTP port
@@ -128,9 +129,11 @@ function main() {
             devices[mac] = device;
             preparePlayer(device);
         }
+        
+        adapter.setState('info.connection', true, true);
     });
 
-    squeezeboxServer.start();
+    squeezeboxServer.start(adapter.config.username, adapter.config.password);
 }
 
 function setStateAck(name, value)
@@ -156,7 +159,7 @@ function preparePlayer(device) {
     var player = device.player;
     
     player.on('logitech_event', function (data) {
-        adapter.log.info("Got event from " + device.mac + ": " + data);
+        adapter.log.debug("Got event from " + device.mac + ": " + data);
         processSqueezeboxEvents(device, data.split(' '));
     });
     

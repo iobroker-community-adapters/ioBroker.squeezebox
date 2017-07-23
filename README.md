@@ -16,7 +16,19 @@ Install this adapter via ioBroker Admin.
 ## Configuration
 ### Logitech Media Server Address
 This is the IP address or host name of your Squeezebox Server.
-The server must listen to telnet commands on TCP port 9090 (don't confuse this with the web (HTTP) port which will always be a different one).
+
+### Logitech Media Server Port
+This is the TCP port of your Squeezebox Server.
+Optional, default value is 9090.
+The server must listen to telnet commands on this port (don't confuse this with the web (HTTP) port which will always be a different one).
+
+### Username (optional)
+This is the username of your Squeezebox Server.
+By default this can be left empty. It is only needed if your server has password protection turned on.
+
+### Password (optional)
+This is the password of your Squeezebox Server.
+By default this can be left empty. It is only needed if your server has password protection turned on.
 
 ### Track time update interval (sec)
 Every N seconds the elapsed time of playing tracks is updated.
@@ -110,10 +122,16 @@ The formatted time the current song or stream has been played already. This valu
 ### 0.1.0
 * (UncleSamSwiss) Ready to be published to NPM (no further changes)
 
+### 0.2.0
+* (UncleSamSwiss) Added support for optional TCP port number (default is still 9090)
+* (UncleSamSwiss) Added support for optional login using username and password (by default still no authentication is used)
+
 ## Roadmap/Todo
 
 - State for playlist [Arminhh]
 - Synchronization of players [Arminhh]
+- Control LMS from ioBroker (e.g. choose a radio station from the favorites) [ak1]
+
 
 ## License
 
