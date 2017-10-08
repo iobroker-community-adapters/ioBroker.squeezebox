@@ -1,6 +1,8 @@
 ![Logo](admin/squeezebox.png)
 # ioBroker Logitech Squeezebox Adapter
 
+[![NPM version](http://img.shields.io/npm/v/iobroker.squeezebox.svg)](https://www.npmjs.com/package/iobroker.squeezebox) [![Downloads](https://img.shields.io/npm/dm/iobroker.squeezebox.svg)](https://www.npmjs.com/package/iobroker.squeezebox) [![GitHub issues](https://img.shields.io/github/issues/UncleSamSwiss/ioBroker.squeezebox.svg)](https://github.com/UncleSamSwiss/ioBroker.squeezebox/issues)
+
 Controls a Squeezebox Server a.k.a. Logitech Media Server and its players.
 
 ## Install
@@ -113,18 +115,21 @@ String, read-only
 The formatted time the current song or stream has been played already. This value is updated every "Track time update interval" (see Configuration above)
 
 ## Changelog
-### 0.0.1
-* (UncleSamSwiss) Initial version
-
-### 0.0.2
-* (UncleSamSwiss) Support for artwork (will use stream artwork if available, otherwise server artwork)
-
-### 0.1.0
-* (UncleSamSwiss) Ready to be published to NPM (no further changes)
+### 0.2.1
+* (UncleSamSwiss) Fixed issue with more than 9 players (fix in logitechmediaserver package)
 
 ### 0.2.0
 * (UncleSamSwiss) Added support for optional TCP port number (default is still 9090)
 * (UncleSamSwiss) Added support for optional login using username and password (by default still no authentication is used)
+
+### 0.1.0
+* (UncleSamSwiss) Ready to be published to NPM (no further changes)
+
+### 0.0.2
+* (UncleSamSwiss) Support for artwork (will use stream artwork if available, otherwise server artwork)
+
+### 0.0.1
+* (UncleSamSwiss) Initial version
 
 ## Roadmap/Todo
 

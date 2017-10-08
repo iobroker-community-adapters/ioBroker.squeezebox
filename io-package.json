@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "squeezebox",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "Fixed issue with more than 9 players"
+      },
       "0.2.0": {
         "en": "Added support for TCP port number, username and password"
       },
