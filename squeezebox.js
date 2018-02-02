@@ -342,7 +342,7 @@ function completePlayer(device) {
     device.player.runTelnetCmd("artist ?");
     device.player.runTelnetCmd("album ?");
     device.player.runTelnetCmd("mode ?");
-    device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
+    device.player.runTelnetCmd('status - 1 tags:K'); // get the artwork URL
 }
 
 function createStateObject(commonInfo) {
@@ -371,7 +371,7 @@ function processSqueezeboxEvents(device, eventData) {
                 device.elapsedTimer = null;
                 device.player.runTelnetCmd('time ?');
                 device.searchingArtwork = true;
-                device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
+                device.player.runTelnetCmd('status - 1 tags:K'); // get the artwork URL
             }
         }
         return;
