@@ -217,8 +217,8 @@ function preparePlayer(device) {
         }
     });
     
-    player.on('current_title', function (data) {
-        adapter.log.debug("Got current_title from " + device.mac + ": " + data);
+    player.on('title', function (data) {
+        adapter.log.debug("Got title from " + device.mac + ": " + data);
         setStateAck(device.channelName + '.currentTitle', data);
     });
 }
@@ -338,7 +338,7 @@ function completePlayer(device) {
     
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
-    device.player.runTelnetCmd("current_title ?");
+    device.player.runTelnetCmd("title ?");
     device.player.runTelnetCmd("artist ?");
     device.player.runTelnetCmd("album ?");
     device.player.runTelnetCmd("mode ?");
@@ -360,7 +360,7 @@ function processSqueezeboxEvents(device, eventData) {
         return;
     
     if (eventData[0] == 'playlist') {
-        device.player.runTelnetCmd("current_title ?");
+        device.player.runTelnetCmd("title ?");
         device.player.runTelnetCmd("artist ?");
         device.player.runTelnetCmd("album ?");
         device.player.runTelnetCmd("mode ?");
@@ -386,6 +386,12 @@ function processSqueezeboxEvents(device, eventData) {
     if (eventData[0] == 'album') {
         eventData.shift();
         setStateAck(device.channelName + '.currentAlbum', eventData.join(' '));
+        return;
+    }
+    
+    if (eventData[0] == 'title') {
+        eventData.shift();
+        setStateAck(device.channelName + '.currentTitle', eventData.join(' '));
         return;
     }
     
