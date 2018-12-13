@@ -87,6 +87,9 @@ adapter.on('stateChange', function (id, state) {
     else if (dp == 'volume') {
         player.runTelnetCmd('mixer volume ' + val);
     }
+    else if (dp == 'sleep') {
+        player.runTelnetCmd('sleep ' + val);
+    }
 });
 
 // startup
@@ -124,7 +127,8 @@ function main() {
                 player: squeezeboxServer.players[mac],
                 duration: 0,
                 elapsed: 0,
-                searchingArtwork: true
+                searchingArtwork: true,
+                isSleep: false
             };
             devices[mac] = device;
             preparePlayer(device);
@@ -178,6 +182,7 @@ function preparePlayer(device) {
         adapter.log.debug("Got power from " + device.mac + ": " + data);
         if (device.channelName !== null) {
             setStateAck(device.channelName + '.power', data == '1');
+            if(data == "0") checkIsSleepDevice(device);
         }
     });
     
@@ -450,6 +455,15 @@ function processSqueezeboxEvents(device, eventData) {
     }
 
     if(eventData[0] == 'sleep') {
+        device.isSleep = (Number(eventData[1]) > 0);
         setStateAck(device.channelName + '.sleep', Number(eventData[1]));
     }
+}
+
+/**
+ * When call event power
+ */
+function checkIsSleepDevice(device) {
+    setStateAck(device.channelName + '.sleep', 0);
+    device.isSleep = false;
 }
