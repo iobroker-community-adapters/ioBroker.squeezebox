@@ -335,6 +335,13 @@ function completePlayer(device) {
         type: 'string',
         role: 'text'
     });
+    createStateObject({
+        name: channelName + '.sleep',
+        read: true,
+        write: true,
+        type: 'number',
+        role: 'value.interval'
+    });
     
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
@@ -440,5 +447,9 @@ function processSqueezeboxEvents(device, eventData) {
         }
         
         setStateAck(device.channelName + '.currentArtwork', artworkUrl);
+    }
+
+    if(eventData[0] == 'sleep') {
+        setStateAck(device.channelName + '.sleep', Number(eventData[1]));
     }
 }
