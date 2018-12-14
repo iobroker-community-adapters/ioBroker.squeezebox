@@ -90,6 +90,9 @@ adapter.on('stateChange', function (id, state) {
     else if (dp == 'sleep') {
         player.runTelnetCmd('sleep ' + val);
     }
+    else if (dp == 'pathUrl') {
+        player.runTelnetCmd('playlist play ' + val);
+    }
 });
 
 // startup
@@ -348,6 +351,12 @@ function completePlayer(device) {
         type: 'number',
         role: 'value.interval'
     });
+    createStateObject({
+        name: channelName + '.pathUrl',
+        read: true,
+        write: true,
+        type: 'string'
+    });
     
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
@@ -386,6 +395,8 @@ function processSqueezeboxEvents(device, eventData) {
                 device.searchingArtwork = true;
                 device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
             }
+        } else if(eventData[1] == 'open') {
+            setStateAck(device.channelName + '.pathUrl', eventData[2]);
         }
         return;
     }
