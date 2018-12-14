@@ -128,7 +128,8 @@ function main() {
                 duration: 0,
                 elapsed: 0,
                 searchingArtwork: true,
-                isSleep: false
+                isSleep: false,
+                intervalReqTimerSleep: null
             };
             devices[mac] = device;
             preparePlayer(device);
@@ -456,7 +457,21 @@ function processSqueezeboxEvents(device, eventData) {
 
     if(eventData[0] == 'sleep') {
         device.isSleep = (Number(eventData[1]) > 0);
-        setStateAck(device.channelName + '.sleep', Number(eventData[1]));
+        
+        if(device.isSleep) {
+            if(device.intervalReqTimerSleep === null || device.intervalReqTimerSleep === undefined) {
+                adapter.log.info("call => set interval");
+                device.intervalReqTimerSleep = setInterval(function () {
+                    device.player.runTelnetCmd("sleep ?");
+                }, 5000);
+            }
+        } else {
+            adapter.log.info("call => clear interval");
+            clearInterval(device.intervalReqTimerSleep);
+            device.intervalReqTimerSleep = null;
+        }
+       
+        setStateAck(device.channelName + '.sleep', Math.floor(Number(eventData[1])));
     }
 }
 
