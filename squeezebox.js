@@ -46,7 +46,13 @@ adapter.on('stateChange', function (id, state) {
     adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     var idParts = id.split('.');
     var dp = idParts.pop();
-    var name = idParts.slice(2).join('.');
+    
+    var name = idParts.slice(2);
+    if(name[name.length-1] == 'buttons') {
+        name.pop();
+        name.join('.');
+    }
+    
     var device = null;
     for (var mac in devices) {
         if (devices[mac].channelName == name) {
@@ -92,6 +98,15 @@ adapter.on('stateChange', function (id, state) {
     }
     else if (dp == 'pathUrl') {
         player.runTelnetCmd('playlist play ' + val);
+    }
+    else if(dp == 'rew') {
+        player.runTelnetCmd('button rew');
+    }
+    else if(dp == 'fwd') {
+        player.runTelnetCmd('button fwd');
+    }
+    else if(dp.split('_')[0] == 'bt') {
+        player.runTelnetCmd('button preset_' + dp.split('_')[1] + '.single');
     }
 });
 
@@ -257,6 +272,10 @@ function completePlayer(device) {
         }
     });
     createStateObject({
+        name: channelName + '.buttons',
+        type: 'channel'
+    });
+    createStateObject({
         name: channelName + '.power',
         read: true,
         write: true,
@@ -357,7 +376,47 @@ function completePlayer(device) {
         write: true,
         type: 'string'
     });
-    
+    createStateObject({
+        name: channelName + '.buttons.rew',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.fwd',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_1',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_2',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_3',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_4',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_5',
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.bt_6',
+        type: 'boolean',
+        role: 'button'
+    });
+
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
     device.player.runTelnetCmd("current_title ?");
