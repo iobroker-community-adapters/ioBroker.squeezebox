@@ -50,8 +50,8 @@ adapter.on('stateChange', function (id, state) {
     var name = idParts.slice(2);
     if(name[name.length-1] == 'buttons') {
         name.pop();
-        name.join('.');
     }
+    name.join('.');
     
     var device = null;
     for (var mac in devices) {
