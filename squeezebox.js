@@ -99,14 +99,14 @@ adapter.on('stateChange', function (id, state) {
     else if (dp == 'pathUrl') {
         player.runTelnetCmd('playlist play ' + val);
     }
-    else if(dp == 'rew') {
+    else if(dp == 'rewind') {
         player.runTelnetCmd('button rew');
     }
-    else if(dp == 'fwd') {
+    else if(dp == 'forward') {
         player.runTelnetCmd('button fwd');
     }
-    else if(dp.split('_')[0] == 'bt') {
-        player.runTelnetCmd('button preset_' + dp.split('_')[1] + '.single');
+    else if(dp.startsWith('preset_')) {
+        player.runTelnetCmd('button ' + dp + '.single');
     }
 });
 
@@ -201,7 +201,11 @@ function preparePlayer(device) {
         adapter.log.debug("Got power from " + device.mac + ": " + data);
         if (device.channelName !== null) {
             setStateAck(device.channelName + '.power', data == '1');
-            if(data == "0") checkIsSleepDevice(device);
+            if(data == '0') {
+                // power off means: not sleeping anymore
+                setStateAck(device.channelName + '.sleep', 0);
+                device.isSleep = false;
+            }
         }
     });
     
@@ -273,7 +277,8 @@ function completePlayer(device) {
     });
     createStateObject({
         name: channelName + '.buttons',
-        type: 'channel'
+        type: 'channel',
+        role: 'switch'
     });
     createStateObject({
         name: channelName + '.power',
@@ -374,48 +379,33 @@ function completePlayer(device) {
         name: channelName + '.pathUrl',
         read: true,
         write: true,
-        type: 'string'
+        type: 'string',
+        role: 'text.url'
     });
     createStateObject({
-        name: channelName + '.buttons.rew',
+        name: channelName + '.buttons.rewind',
+        read: false,
+        write: true,
         type: 'boolean',
         role: 'button'
     });
     createStateObject({
-        name: channelName + '.buttons.fwd',
+        name: channelName + '.buttons.forward',
+        read: false,
+        write: true,
         type: 'boolean',
         role: 'button'
     });
-    createStateObject({
-        name: channelName + '.buttons.bt_1',
-        type: 'boolean',
-        role: 'button'
-    });
-    createStateObject({
-        name: channelName + '.buttons.bt_2',
-        type: 'boolean',
-        role: 'button'
-    });
-    createStateObject({
-        name: channelName + '.buttons.bt_3',
-        type: 'boolean',
-        role: 'button'
-    });
-    createStateObject({
-        name: channelName + '.buttons.bt_4',
-        type: 'boolean',
-        role: 'button'
-    });
-    createStateObject({
-        name: channelName + '.buttons.bt_5',
-        type: 'boolean',
-        role: 'button'
-    });
-    createStateObject({
-        name: channelName + '.buttons.bt_6',
-        type: 'boolean',
-        role: 'button'
-    });
+    
+    for (var i = 1; i <= 6; i++) {
+        createStateObject({
+            name: channelName + '.buttons.preset_' + i,
+            read: false,
+            write: true,
+            type: 'boolean',
+            role: 'button'
+        });
+    }
 
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
@@ -530,25 +520,17 @@ function processSqueezeboxEvents(device, eventData) {
         
         if(device.isSleep) {
             if(device.intervalReqTimerSleep === null || device.intervalReqTimerSleep === undefined) {
-                adapter.log.info("call => set interval");
+                adapter.log.info("got sleep " + eventData[1] + ", setting interval");
                 device.intervalReqTimerSleep = setInterval(function () {
                     device.player.runTelnetCmd("sleep ?");
-                }, 5000);
+                }, (adapter.config.elapsedInterval || 5) * 1000);
             }
         } else {
-            adapter.log.info("call => clear interval");
+            adapter.log.info("got sleep 0, clearing interval");
             clearInterval(device.intervalReqTimerSleep);
             device.intervalReqTimerSleep = null;
         }
        
         setStateAck(device.channelName + '.sleep', Math.floor(Number(eventData[1])));
     }
-}
-
-/**
- * When call event power
- */
-function checkIsSleepDevice(device) {
-    setStateAck(device.channelName + '.sleep', 0);
-    device.isSleep = false;
 }
