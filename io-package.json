@@ -1,47 +1,55 @@
 {
-  "common": {
-    "name": "squeezebox",
-    "version": "0.2.1",
-    "news": {
-      "0.2.1": {
-        "en": "Fixed issue with more than 9 players"
-      },
-      "0.2.0": {
-        "en": "Added support for TCP port number, username and password"
-      },
-      "0.1.0": {
-        "en": "Ready to be published to NPM (no further changes)"
-      },
-      "0.0.2": {
-        "en": "Support for artwork (will use stream artwork if available, otherwise server artwork)"
-      },
-      "0.0.1": {
-        "en": "Initial version"
-      }
+    "common": {
+        "name": "squeezebox",
+        "version": "1.0.0",
+        "news": {
+            "1.0.0": {
+                "en": "Fixed title error in streams and artwork. Added buttons for forward/rewind and presets. Added playlist path URL and sleep states."
+            },
+            "0.2.1": {
+                "en": "Fixed issue with more than 9 players"
+            },
+            "0.2.0": {
+                "en": "Added support for TCP port number, username and password"
+            },
+            "0.1.0": {
+                "en": "Ready to be published to NPM (no further changes)"
+            },
+            "0.0.2": {
+                "en": "Support for artwork (will use stream artwork if available, otherwise server artwork)"
+            },
+            "0.0.1": {
+                "en": "Initial version"
+            }
+        },
+        "title": "Logitech Squeezebox Adapter",
+        "desc": "Controls a Squeezebox Server a.k.a. Logitech Media Server and its players.",
+        "authors": [
+            "UncleSamSwiss <samuel.weibel@gmail.com>"
+        ],
+        "license": "Apache 2.0",
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "messagebox": true,
+        "readme": "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/README.md",
+        "loglevel": "info",
+        "type": "multimedia",
+        "keywords": [
+            "squeezebox",
+            "logitech",
+            "media server",
+            "audio",
+            "playback"
+        ],
+        "icon": "squeezebox.png",
+        "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.squeezebox/master/admin/squeezebox.png"
     },
-    "title": "Logitech Squeezebox Adapter",
-    "desc": "Controls a Squeezebox Server a.k.a. Logitech Media Server and its players.",
-    "authors": [
-      "UncleSamSwiss <samuel.weibel@gmail.com>"
-    ],
-    "license": "Apache 2.0",
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "messagebox": true,
-    "readme": "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/README.md",
-    "loglevel": "info",
-    "type": "multimedia",
-    "keywords": [ "squeezebox", "logitech", "media server", "audio", "playback" ],
-    "icon": "squeezebox.png",
-    "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.squeezebox/master/admin/squeezebox.png"
-  },
-  "native": {
-    "server": "0.0.0.0",
-    "port": 9090,
-    "username": "",
-    "password": "",
-    "elapsedInterval": 5
-  },
-  "objects": [
-  ]
+    "native": {
+        "server": "0.0.0.0",
+        "port": 9090,
+        "username": "",
+        "password": "",
+        "elapsedInterval": 5
+    },
+    "objects": []
 }

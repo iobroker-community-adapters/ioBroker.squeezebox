@@ -71,6 +71,11 @@ Boolean, read-write
 - true: player is muted (playback continues, but loudspeaker is off)
 - false: player is in regular playback mode
 
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.pathUrl
+String, read-write
+
+The URL of the currently playing (or paused) song or stream.
+
 ### squeezebox.&lt;instance&gt;.&lt;player&gt;.currentTitle
 String, read-only
 
@@ -114,21 +119,48 @@ String, read-only
 
 The formatted time the current song or stream has been played already. This value is updated every "Track time update interval" (see Configuration above)
 
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.sleep
+Integer, read-write
+
+The number of seconds until the player goes to sleep.
+Set this state to fade out and turn off the player with the given number of seconds as a duration.
+If this value is zero, the player is either off or not going to sleep; otherwise this player is going to sleep.
+
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.buttons.forward
+Button, write-only
+
+Jumps to the next track in the playlist.
+
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.buttons.rewind
+Button, write-only
+
+Jumps to the previous track in the playlist.
+
+### squeezebox.&lt;instance&gt;.&lt;player&gt;.buttons.preset_&lt;1-6&gt;
+Button, write-only
+
+Switches to given preset number stored in the player.
+
 ## Changelog
-### 0.2.1
+### 1.0.0 (2018-12-23)
+* (mrMuppet) Fixed title error in streams and artwork.
+* (mafof) Added buttons for forward/rewind and presets.
+* (mafof) Added playlist path URL and sleep states.
+
+### 0.2.1 (2017-10-08)
 * (UncleSamSwiss) Fixed issue with more than 9 players (fix in logitechmediaserver package)
 
-### 0.2.0
+### 0.2.0 (2017-07-24)
 * (UncleSamSwiss) Added support for optional TCP port number (default is still 9090)
 * (UncleSamSwiss) Added support for optional login using username and password (by default still no authentication is used)
 
-### 0.1.0
+### 0.1.0 (2016-01-16)
 * (UncleSamSwiss) Ready to be published to NPM (no further changes)
 
-### 0.0.2
+### 0.0.2 (2016-01-10)
 * (UncleSamSwiss) Support for artwork (will use stream artwork if available, otherwise server artwork)
 
-### 0.0.1
+### 0.0.1 (2015-12-07)
 * (UncleSamSwiss) Initial version
 
 ## Roadmap/Todo
