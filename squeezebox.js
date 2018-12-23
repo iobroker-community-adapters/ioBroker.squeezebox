@@ -5,7 +5,7 @@ var utils = require(__dirname + '/lib/utils');
 var logitechmediaserver = require('logitechmediaserver');
 
 // create the adapter object
-var adapter = utils.adapter('squeezebox');
+var adapter = utils.Adapter('squeezebox');
 
 var squeezeboxServer;
 var devices = {}; // mapping of MAC to device object (which has a reference to the player for that device)
