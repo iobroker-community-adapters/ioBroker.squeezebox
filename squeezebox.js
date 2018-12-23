@@ -46,7 +46,13 @@ adapter.on('stateChange', function (id, state) {
     adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     var idParts = id.split('.');
     var dp = idParts.pop();
-    var name = idParts.slice(2).join('.');
+    
+    var name = idParts.slice(2);
+    if(name[name.length-1] == 'buttons') {
+        name.pop();
+    }
+    name.join('.');
+    
     var device = null;
     for (var mac in devices) {
         if (devices[mac].channelName == name) {
@@ -87,6 +93,21 @@ adapter.on('stateChange', function (id, state) {
     else if (dp == 'volume') {
         player.runTelnetCmd('mixer volume ' + val);
     }
+    else if (dp == 'sleep') {
+        player.runTelnetCmd('sleep ' + val);
+    }
+    else if (dp == 'pathUrl') {
+        player.runTelnetCmd('playlist play ' + val);
+    }
+    else if(dp == 'rewind') {
+        player.runTelnetCmd('button rew');
+    }
+    else if(dp == 'forward') {
+        player.runTelnetCmd('button fwd');
+    }
+    else if(dp.startsWith('preset_')) {
+        player.runTelnetCmd('button ' + dp + '.single');
+    }
 });
 
 // startup
@@ -124,7 +145,9 @@ function main() {
                 player: squeezeboxServer.players[mac],
                 duration: 0,
                 elapsed: 0,
-                searchingArtwork: true
+                searchingArtwork: true,
+                isSleep: false,
+                intervalReqTimerSleep: null
             };
             devices[mac] = device;
             preparePlayer(device);
@@ -178,6 +201,11 @@ function preparePlayer(device) {
         adapter.log.debug("Got power from " + device.mac + ": " + data);
         if (device.channelName !== null) {
             setStateAck(device.channelName + '.power', data == '1');
+            if(data == '0') {
+                // power off means: not sleeping anymore
+                setStateAck(device.channelName + '.sleep', 0);
+                device.isSleep = false;
+            }
         }
     });
     
@@ -246,6 +274,11 @@ function completePlayer(device) {
             mac: device.mac,
             name: device.name
         }
+    });
+    createStateObject({
+        name: channelName + '.buttons',
+        type: 'channel',
+        role: 'switch'
     });
     createStateObject({
         name: channelName + '.power',
@@ -335,7 +368,45 @@ function completePlayer(device) {
         type: 'string',
         role: 'text'
     });
+    createStateObject({
+        name: channelName + '.sleep',
+        read: true,
+        write: true,
+        type: 'number',
+        role: 'value.interval'
+    });
+    createStateObject({
+        name: channelName + '.pathUrl',
+        read: true,
+        write: true,
+        type: 'string',
+        role: 'text.url'
+    });
+    createStateObject({
+        name: channelName + '.buttons.rewind',
+        read: false,
+        write: true,
+        type: 'boolean',
+        role: 'button'
+    });
+    createStateObject({
+        name: channelName + '.buttons.forward',
+        read: false,
+        write: true,
+        type: 'boolean',
+        role: 'button'
+    });
     
+    for (var i = 1; i <= 6; i++) {
+        createStateObject({
+            name: channelName + '.buttons.preset_' + i,
+            read: false,
+            write: true,
+            type: 'boolean',
+            role: 'button'
+        });
+    }
+
     // request all information we need
     device.player.runTelnetCmd('mixer muting ?');
     device.player.runTelnetCmd("current_title ?");
@@ -373,6 +444,8 @@ function processSqueezeboxEvents(device, eventData) {
                 device.searchingArtwork = true;
                 device.player.runTelnetCmd('status 0 1 tags:K'); // get the artwork URL
             }
+        } else if(eventData[1] == 'open') {
+            setStateAck(device.channelName + '.pathUrl', eventData[2]);
         }
         return;
     }
@@ -440,5 +513,24 @@ function processSqueezeboxEvents(device, eventData) {
         }
         
         setStateAck(device.channelName + '.currentArtwork', artworkUrl);
+    }
+
+    if(eventData[0] == 'sleep') {
+        device.isSleep = (Number(eventData[1]) > 0);
+        
+        if(device.isSleep) {
+            if(device.intervalReqTimerSleep === null || device.intervalReqTimerSleep === undefined) {
+                adapter.log.info("got sleep " + eventData[1] + ", setting interval");
+                device.intervalReqTimerSleep = setInterval(function () {
+                    device.player.runTelnetCmd("sleep ?");
+                }, (adapter.config.elapsedInterval || 5) * 1000);
+            }
+        } else {
+            adapter.log.info("got sleep 0, clearing interval");
+            clearInterval(device.intervalReqTimerSleep);
+            device.intervalReqTimerSleep = null;
+        }
+       
+        setStateAck(device.channelName + '.sleep', Math.floor(Number(eventData[1])));
     }
 }
