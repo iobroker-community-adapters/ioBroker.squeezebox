@@ -126,6 +126,11 @@ logitechmediaserver.prototype.handleLine = function (buffer) {
 }
 
 function main() {
+    if (adapter.config.server == '0.0.0.0') {
+        adapter.log.warn('Can\'n start adapter for invalid server address: ' + adapter.config.server);
+        return;
+    }
+
     adapter.setState('info.connection', false, true);
     adapter.subscribeStates('*');
 
