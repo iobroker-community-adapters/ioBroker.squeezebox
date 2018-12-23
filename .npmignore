@@ -4,4 +4,8 @@ node_modules
 .idea
 .gitignore
 .git
+.vscode
 .DS_Store
+test
+.travis.yml
+appveyor.yml
