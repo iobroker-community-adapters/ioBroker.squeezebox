@@ -12,8 +12,8 @@
       "email": "samuel.weibel@gmail.com"
     }
   ],
-  "homepage": "https://github.com/UncleSamSwiss/ioBroker.squeezebox",
-  "readme": "https://github.com/UncleSamSwiss/ioBroker.squeezebox/blob/master/README.md",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.squeezebox",
+  "readme": "https://github.com/iobroker-community-adapters/ioBroker.squeezebox/blob/master/README.md",
   "license": "Apache-2.0",
   "keywords": [
     "ioBroker",
@@ -25,7 +25,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UncleSamSwiss/ioBroker.squeezebox.git"
+    "url": "git+https://github.com/iobroker-community-adapters/ioBroker.squeezebox.git"
   },
   "dependencies": {
     "logitechmediaserver": "~0.0.5",
@@ -40,7 +40,7 @@
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
   "bugs": {
-    "url": "https://github.com/UncleSamSwiss/ioBroker.squeezebox/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.squeezebox/issues"
   },
   "main": "squeezebox.js"
 }
